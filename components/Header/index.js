@@ -35,7 +35,7 @@ export default function ButtonAppBar() {
               Github Finder
             </Typography>
           </Link>
-          <Link href="/users">
+          <Link href="/users/search">
             <Button color="inherit" component="a">
               Users
             </Button>

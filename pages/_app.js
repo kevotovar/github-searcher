@@ -1,11 +1,19 @@
 import React from 'react';
+import Router from 'next/router';
+import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Grid from '@material-ui/core/Grid';
 
 import Header from '../components/Header';
 import theme from '../styles/theme';
+import 'nprogress/nprogress.css';
+
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
@@ -28,8 +36,14 @@ export default function MyApp(props) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Header />
-        <Component {...pageProps} />
+        <Grid container spacing={0}>
+          <Grid item xs={12}>
+            <Header />
+          </Grid>
+          <Grid item xs={12}>
+            <Component {...pageProps} />
+          </Grid>
+        </Grid>
       </ThemeProvider>
     </React.Fragment>
   );
