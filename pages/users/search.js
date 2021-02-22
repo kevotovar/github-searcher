@@ -3,8 +3,10 @@ import Pagination from '@material-ui/lab/Pagination';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
 
 import UserSearchCard from '../../components/UserSearchCard';
+import SingleSearchBar from '../../components/SingleSearchBar';
 import { searchUser } from '../../services';
 
 export async function getServerSideProps(context) {
@@ -67,7 +69,7 @@ export default function UsersSearch({ usersData, error }) {
         </Head>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            searchbar
+            <SingleSearchBar />
           </Grid>
           {usersData.items.map(({ id, login, avatar_url }) => (
             <Grid item xs={12} md={6} lg={4} key={id}>
@@ -88,5 +90,21 @@ export default function UsersSearch({ usersData, error }) {
       </div>
     );
   }
-  return 'empty';
+  return (
+    <div className={styles.root}>
+      <Head>
+        <title>Lookin for: {decodeURIComponent(query)}</title>
+      </Head>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <SingleSearchBar />
+        </Grid>
+      </Grid>
+    </div>
+  );
 }
+
+UsersSearch.propTypes = {
+  usersData: PropTypes.object,
+  error: PropTypes.bool,
+};

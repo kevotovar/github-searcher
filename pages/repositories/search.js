@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import Head from 'next/head';
 import Pagination from '@material-ui/lab/Pagination';
 import Grid from '@material-ui/core/Grid';
@@ -5,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 
 import RepositorySearchCard from '../../components/RepositorySearchCard';
+import SingleSearchBar from '../../components/SingleSearchBar';
 import { searchRepositories } from '../../services';
 
 export async function getServerSideProps(context) {
@@ -68,7 +70,7 @@ export default function RepositoriesSearch({ repositoriesData, error }) {
         </Head>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            searchbar
+            <SingleSearchBar />
           </Grid>
           {repositoriesData.items.map(({ id, full_name }) => (
             <Grid item xs={12} md={6} lg={4} key={id}>
@@ -89,5 +91,21 @@ export default function RepositoriesSearch({ repositoriesData, error }) {
       </div>
     );
   }
-  return 'empty';
+  return (
+    <div className={styles.root}>
+      <Head>
+        <title>Looking for: {query}</title>
+      </Head>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <SingleSearchBar />
+        </Grid>
+      </Grid>
+    </div>
+  );
 }
+
+RepositoriesSearch.propTypes = {
+  usersData: PropTypes.object,
+  error: PropTypes.bool,
+};

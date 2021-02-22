@@ -40,7 +40,7 @@ export default function ButtonAppBar() {
               Users
             </Button>
           </Link>
-          <Link href="/repositories">
+          <Link href="/repositories/search">
             <Button color="inherit" component="a">
               Repositories
             </Button>
