@@ -4,19 +4,20 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 
-import UserSearchCard from '../../components/UserSearchCard';
-import { searchUser } from '../../services';
+import RepositorySearchCard from '../../components/RepositorySearchCard';
+import { searchRepositories } from '../../services';
 
 export async function getServerSideProps(context) {
   if (context.query.q) {
     try {
-      const responseData = await searchUser({
+      const responseData = await searchRepositories({
         q: context.query.q,
         page: context.query.page,
+        per_page: 10,
       });
       return {
         props: {
-          usersData: responseData.data,
+          repositoriesData: responseData.data,
           q: context.query.q,
         },
       };
@@ -42,36 +43,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UsersSearch({ usersData, error }) {
+export default function RepositoriesSearch({ repositoriesData, error }) {
   const styles = useStyles();
   const router = useRouter();
   const currentPage = Number(router.query.page || 1);
-  const query = decodeURIComponent(router.query.q);
   const changePage = (_, value) => {
     router.push({
       query: {
         page: value,
-        q: query,
+        q: router.query.q,
       },
     });
   };
+  const query = decodeURIComponent(router.query.q);
   if (error) {
     return 'error page';
   }
-  if (usersData) {
-    const count = Math.min(usersData.total_count / 30, 30);
+  if (repositoriesData) {
+    const count = Math.min(repositoriesData.total_count / 30, 30);
     return (
       <div className={styles.root}>
         <Head>
-          <title>Lookin for: {decodeURIComponent(query)}</title>
+          <title>Looking for: {query}</title>
         </Head>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             searchbar
           </Grid>
-          {usersData.items.map(({ id, login, avatar_url }) => (
+          {repositoriesData.items.map(({ id, full_name }) => (
             <Grid item xs={12} md={6} lg={4} key={id}>
-              <UserSearchCard login={login} avatarUrl={avatar_url} />
+              <RepositorySearchCard fullName={full_name} />
             </Grid>
           ))}
           <Grid item xs={12}>

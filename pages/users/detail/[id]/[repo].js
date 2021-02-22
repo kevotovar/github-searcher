@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+import Head from 'next/head';
 
 import { fetchRepository } from '../../../../services';
 import RepositoryDetailCard from '../../../../components/RepositoryDetailCard';
@@ -29,27 +30,32 @@ const useStyles = makeStyles((theme) => ({
 export default function UserRepository({ data }) {
   const styles = useStyles();
   return (
-    <div className={styles.root}>
-      <Grid item container xs={12} spacing={2}>
-        <Grid item xs={12}>
-          <RepositoryDetailCard
-            name={data.name}
-            homepage={data.homepage}
-            fullName={data.full_name}
-          />
+    <>
+      <Head>
+        <title>{data.name} repository</title>
+      </Head>
+      <div className={styles.root}>
+        <Grid item container xs={12} spacing={2}>
+          <Grid item xs={12}>
+            <RepositoryDetailCard
+              name={data.name}
+              homepage={data.homepage}
+              fullName={data.full_name}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <OwnerCard owner={data.owner} />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RepositoryStatsCard
+              forks={data.forks}
+              watchers={data.watchers_count}
+              stargazers={data.stargazers_count}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <OwnerCard owner={data.owner} />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <RepositoryStatsCard
-            forks={data.forks}
-            watchers={data.watchers_count}
-            stargazers={data.stargazers_count}
-          />
-        </Grid>
-      </Grid>
-    </div>
+      </div>
+    </>
   );
 }
 
