@@ -31,18 +31,20 @@ export async function getServerSideProps(context) {
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    boxSizing: 'border-box',
     padding: theme.spacing(2),
+    flexGrow: 1,
   },
 }));
 
 export default function UserDetail({ userDetail, userRepositories }) {
   const styles = useStyles();
   return (
-    <>
+    <div className={styles.root}>
       <Head>
         <title>{userDetail.name} profile</title>
       </Head>
-      <Grid item container spacing={4} className={styles.root}>
+      <Grid container spacing={4}>
         <Grid item xs={12}>
           <UserDetailCard
             avatarUrl={userDetail.avatar_url}
@@ -60,7 +62,7 @@ export default function UserDetail({ userDetail, userRepositories }) {
           <UserRepositories userRepositories={userRepositories} />
         </Grid>
       </Grid>
-    </>
+    </div>
   );
 }
 

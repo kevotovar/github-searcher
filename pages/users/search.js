@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     boxSizing: 'border-box',
     padding: theme.spacing(2),
+    flexGrow: 1,
   },
 }));
 
@@ -59,11 +60,11 @@ export default function UsersSearch({ usersData, error }) {
   if (usersData) {
     const count = Math.min(usersData.total_count / 30, 30);
     return (
-      <>
+      <div className={styles.root}>
         <Head>
           <title>Buscando usuarios</title>
         </Head>
-        <Grid container item className={styles.root} spacing={2}>
+        <Grid container spacing={2}>
           <Grid item xs={12}>
             searchbar
           </Grid>
@@ -83,7 +84,7 @@ export default function UsersSearch({ usersData, error }) {
             />
           </Grid>
         </Grid>
-      </>
+      </div>
     );
   }
   return 'empty';

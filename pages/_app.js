@@ -36,7 +36,7 @@ export default function MyApp(props) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Grid container spacing={2}>
+        <Grid container spacing={0} style={{ width: '100%' }}>
           <Grid item xs={12}>
             <Header />
           </Grid>
