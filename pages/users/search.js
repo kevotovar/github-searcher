@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import Pagination from '@material-ui/lab/Pagination';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,15 +9,24 @@ import { searchUser } from '../../services';
 
 export async function getServerSideProps(context) {
   if (context.query.q) {
-    const responseData = await searchUser({
-      q: context.query.q,
-      page: context.query.page,
-    });
-    return {
-      props: {
-        usersData: responseData.data,
-      },
-    };
+    try {
+      const responseData = await searchUser({
+        q: context.query.q,
+        page: context.query.page,
+      });
+      return {
+        props: {
+          usersData: responseData.data,
+          q: context.query.q,
+        },
+      };
+    } catch (error) {
+      return {
+        props: {
+          error: true,
+        },
+      };
+    }
   }
 
   return {
@@ -31,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UsersSearch({ usersData }) {
+export default function UsersSearch({ usersData, error }) {
   const styles = useStyles();
   const router = useRouter();
   const currentPage = Number(router.query.page || 1);
@@ -43,29 +53,37 @@ export default function UsersSearch({ usersData }) {
       },
     });
   };
+  if (error) {
+    return 'error page';
+  }
   if (usersData) {
-    const count = Math.ceil(usersData.total_count / 30);
+    const count = Math.min(usersData.total_count / 30, 30);
     return (
-      <Grid container item className={styles.root} spacing={2}>
-        <Grid item xs={12}>
-          searchbar
-        </Grid>
-        {usersData.items.map(({ id, login, avatar_url }) => (
-          <Grid item xs={12} md={6} lg={4} key={id}>
-            <UserSearchCard login={login} avatarUrl={avatar_url} />
+      <>
+        <Head>
+          <title>Buscando usuarios</title>
+        </Head>
+        <Grid container item className={styles.root} spacing={2}>
+          <Grid item xs={12}>
+            searchbar
           </Grid>
-        ))}
-        <Grid item xs={12}>
-          <Pagination
-            count={count}
-            color="primary"
-            variant="outlined"
-            shape="rounded"
-            page={currentPage}
-            onChange={changePage}
-          />
+          {usersData.items.map(({ id, login, avatar_url }) => (
+            <Grid item xs={12} md={6} lg={4} key={id}>
+              <UserSearchCard login={login} avatarUrl={avatar_url} />
+            </Grid>
+          ))}
+          <Grid item xs={12}>
+            <Pagination
+              count={count}
+              color="primary"
+              variant="outlined"
+              shape="rounded"
+              page={currentPage}
+              onChange={changePage}
+            />
+          </Grid>
         </Grid>
-      </Grid>
+      </>
     );
   }
   return 'empty';

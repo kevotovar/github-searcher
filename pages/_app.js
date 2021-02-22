@@ -36,11 +36,11 @@ export default function MyApp(props) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Grid container spacing={0}>
+        <Grid container spacing={2}>
           <Grid item xs={12}>
             <Header />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item container xs={12}>
             <Component {...pageProps} />
           </Grid>
         </Grid>

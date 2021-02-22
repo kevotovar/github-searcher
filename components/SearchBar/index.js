@@ -54,7 +54,12 @@ export default function SearchBar() {
   const styles = useStyles();
   const onSubmit = (values) => {
     if (values.select === 'users') {
-      return router.push(`/users/search?q=${values.text}`);
+      return router.push({
+        pathname: `/users/search`,
+        query: {
+          q: values.text,
+        },
+      });
     }
     return router.push(`/repositories/search?q=${values.text}`);
   };
