@@ -106,6 +106,6 @@ export default function RepositoriesSearch({ repositoriesData, error }) {
 }
 
 RepositoriesSearch.propTypes = {
-  usersData: PropTypes.object,
+  repositoriesData: PropTypes.object,
   error: PropTypes.bool,
 };
